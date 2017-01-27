@@ -1,5 +1,5 @@
 
-var app = angular.module('shoppingApp', []);
+var app = angular.module('shoppingApp', ["ngRoute"]);
 
 
 app.controller("HomeController", ["$scope", function($scope) {

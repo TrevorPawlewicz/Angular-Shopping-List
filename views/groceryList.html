@@ -1,0 +1,9 @@
+<div class="col-xs-12">
+    <ul class="list-group">
+        <!-- app -> GroceryListItemController -> groceryItems -->
+        <li ng-repeat="stuff in groceryItems | orderBy: 'date'"
+            class="list-group-item text-center clearfix">
+            <span>{{stuff.itemName | uppercase}}</span>
+        </li>
+    </ul>
+</div>
