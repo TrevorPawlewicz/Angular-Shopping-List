@@ -109,3 +109,15 @@ app.controller("GroceryListItemController", ["$scope", "$routeParams", "$locatio
     };
 
 }]);
+
+
+
+
+
+
+app.directive("trevGroceryItem", function(){
+    return {
+        restrict: "E", // element
+        templateUrl: "views/groceryItem.html"
+    }
+});
