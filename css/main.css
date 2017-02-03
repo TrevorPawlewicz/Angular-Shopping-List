@@ -6,3 +6,7 @@ body {
 .shop-item {
     font-weight: bold;
 }
+
+a {
+    margin-right: 10px;
+}
