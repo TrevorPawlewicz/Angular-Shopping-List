@@ -24,12 +24,12 @@ app.service("GroceryService", function(){
     var groceryService = {};
 
     groceryService.groceryItems = [
-        {id: 1, completed: true, itemName: 'milk', date: new Date("October 1, 2014 11:13:00")},
-        {id: 2, completed: true, itemName: 'cookies', date: new Date("October 1, 2014 11:13:00")},
-        {id: 3, completed: true, itemName: 'ice cream', date: new Date("October 1, 2014 11:13:00")},
-        {id: 4, completed: true, itemName: 'potatoes', date: new Date("October 2, 2014 11:13:00")},
-        {id: 5, completed: true, itemName: 'cereal', date: new Date("October 3, 2014 11:13:00")},
-        {id: 6, completed: true, itemName: 'bread', date: new Date("October 3, 2014 11:13:00")}
+        {id: 1, completed: false, itemName: 'milk', date: new Date("October 1, 2014 11:13:00")},
+        {id: 2, completed: false, itemName: 'cookies', date: new Date("October 1, 2014 11:13:00")},
+        {id: 3, completed: false, itemName: 'ice cream', date: new Date("October 1, 2014 11:13:00")},
+        {id: 4, completed: false, itemName: 'potatoes', date: new Date("October 2, 2014 11:13:00")},
+        {id: 5, completed: false, itemName: 'cereal', date: new Date("October 3, 2014 11:13:00")},
+        {id: 6, completed: false, itemName: 'bread', date: new Date("October 3, 2014 11:13:00")}
     ];
 
 
@@ -55,6 +55,11 @@ app.service("GroceryService", function(){
             groceryService.newId = maxId.id + 1;
             return groceryService.newId;
         }
+    };
+
+    // check / uncheck
+    groceryService.markCompleted = function(entry){
+        entry.completed = !entry.completed;
     };
 
     // DELETE
@@ -90,7 +95,11 @@ app.controller("HomeController", ["$scope", "GroceryService", function($scope, G
 
     $scope.removeItem = function(entry) {
         GroceryService.removeItem(entry);
-    }
+    };
+
+    $scope.markCompleted = function(entry){
+        GroceryService.markCompleted(entry);
+    };
 }]);
 
 app.controller("GroceryListItemController", ["$scope", "$routeParams", "$location", "GroceryService", function($scope, $routeParams, $location, GroceryService){
@@ -114,7 +123,7 @@ app.controller("GroceryListItemController", ["$scope", "$routeParams", "$locatio
 
 
 
-
+// custom directive
 app.directive("trevGroceryItem", function(){
     return {
         restrict: "E", // element
