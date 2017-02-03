@@ -60,13 +60,13 @@ app.service("GroceryService", function(){
 
         var updatedItem = groceryService.findById(entry.id);
 
-        if(updatedItem){
+        if (updatedItem) {
 
             updatedItem.completed = entry.completed;
             updatedItem.itemName = entry.itemName;
             updatedItem.date = entry.date;
 
-        }else {
+        } else {
             entry.id = groceryService.getNewId();
             groceryService.groceryItems.push(entry);
         }
@@ -83,9 +83,11 @@ app.controller("HomeController", ["$scope", "GroceryService", function($scope, G
 
 app.controller("GroceryListItemController", ["$scope", "$routeParams", "$location", "GroceryService", function($scope, $routeParams, $location, GroceryService){
 
-    if(!$routeParams.id) {
+    // if no id, NEW entry:
+    if (!$routeParams.id) {
         $scope.groceryItem = {id: 0, completed: false, itemName: "", date: new Date()};
-    }else{
+    } else {
+        //                  clone and save tht one
         $scope.groceryItem = _.clone(GroceryService.findById(parseInt($routeParams.id)));
     }
 
