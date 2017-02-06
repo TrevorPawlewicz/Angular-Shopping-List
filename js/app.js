@@ -19,18 +19,26 @@ app.config(function($routeProvider){
         })
 });
 
-app.service("GroceryService", function(){
+app.service("GroceryService", function($http){
 
     var groceryService = {};
 
-    groceryService.groceryItems = [
-        {id: 1, completed: false, itemName: 'milk', date: new Date("October 1, 2014 11:13:00")},
-        {id: 2, completed: false, itemName: 'cookies', date: new Date("October 1, 2014 11:13:00")},
-        {id: 3, completed: false, itemName: 'ice cream', date: new Date("October 1, 2014 11:13:00")},
-        {id: 4, completed: false, itemName: 'potatoes', date: new Date("October 2, 2014 11:13:00")},
-        {id: 5, completed: false, itemName: 'cereal', date: new Date("October 3, 2014 11:13:00")},
-        {id: 6, completed: false, itemName: 'bread', date: new Date("October 3, 2014 11:13:00")}
-    ];
+    // data that would normally be pulled from a server with a RESTful request:
+    //$http.get("http://example.com...");
+    // we will use a data file:
+    $http.get("data/server_data.json")
+        .success(function(data){
+            groceryService.groceryItems = data;
+
+            for(var item in groceryService.groceryItems){
+                groceryService.groceryItems[item].date = new Date(groceryService.groceryItems[item].date);
+            }
+        })
+        .error(function(data, status){
+
+        });
+
+    groceryService.groceryItems = [];
 
 
     groceryService.findById = function(id){
@@ -100,6 +108,11 @@ app.controller("HomeController", ["$scope", "GroceryService", function($scope, G
     $scope.markCompleted = function(entry){
         GroceryService.markCompleted(entry);
     };
+
+    // watch adds a listener to update our data on page
+    $scope.$watch( function(){ return GroceryService.groceryItems; }, function(groceryItems) {
+        $scope.groceryItems = groceryItems;
+    });
 }]);
 
 app.controller("GroceryListItemController", ["$scope", "$routeParams", "$location", "GroceryService", function($scope, $routeParams, $location, GroceryService){
