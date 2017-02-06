@@ -72,9 +72,18 @@ app.service("GroceryService", function($http){
 
     // DELETE
     groceryService.removeItem = function(entry) {
-        var index = groceryService.groceryItems.indexOf(entry);
+        $http.post("data/delete_item.json", {id: entry.id})
+            .success(function(data){
 
-        groceryService.groceryItems.splice(index, 1);
+                if(data.status){
+                    var index = groceryService.groceryItems.indexOf(entry);
+                    groceryService.groceryItems.splice(index, 1);
+                }
+
+            })
+            .error(function(data, status){
+
+            });
     };
 
     // SAVE
@@ -83,13 +92,31 @@ app.service("GroceryService", function($http){
         var updatedItem = groceryService.findById(entry.id);
 
         if (updatedItem) {
+            $http.post("data/updated_item.json", entry)
 
-            updatedItem.completed = entry.completed;
-            updatedItem.itemName = entry.itemName;
-            updatedItem.date = entry.date;
+                .success(function(data){
+                    if (data.status == 1) {
+                        updatedItem.completed = entry.completed;
+                        updatedItem.itemName = entry.itemName;
+                        updatedItem.date = entry.date;
+                    }
+                })
+                .error(function(data, status){
+
+                });
 
         } else {
-            entry.id = groceryService.getNewId();
+            //entry.id = groceryService.getNewId(); local made ID we make
+
+            // server made ID:
+            $http.post("data/added_item.json", entry)
+                .success(function(data){
+                    entry.id = data.newId;
+                })
+                .error(function(data, status){
+
+                });
+
             groceryService.groceryItems.push(entry);
         }
 
